@@ -4,3 +4,7 @@
 - Entity Framework Core 3.1
 ### How to configure and run
 #### How to contribute
+## Install pakage
+- Microsoft.EntityFrameworkCore.SqlServer
+- Microsoft.EntityFrameworkCore.Design
+- Microsoft.EntityFrameworkCore.Tools
