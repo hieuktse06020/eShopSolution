@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Data.Entities;
 using eShopSolution.Data.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -59,15 +60,48 @@ namespace eShopSolution.Data.Migrations.Extensions
                     new ProductTranslation() { Id = 2, ProductId = 1, Name = "Viet Tien Men T-Shirt", LanguageId = "en-US", SeoAlias = "viet-tien-men-t-shirt", SeoDescription = "Viet Tien Men T-Shirt", SeoTitle = "Viet Tien Men T-Shirt", Details = "Viet Tien Men T-Shirt", Description = "Viet Tien Men T-Shirt" }
 
                 );
+            var adminId = new Guid("891EA0CC-8F28-4858-9154-24F3CD80C3FF");
+            var roleId = new Guid("49D64DE6-AB22-4C6E-97B1-511BD45AE04E");
             modelBuilder.Entity<ProductInCategory>().HasData(
                     new ProductInCategory() {ProductId = 1, CategoryId = 1}
                 );
             modelBuilder.Entity<Order>().HasData(
-                    new Order() {Id = 1, OrderDate = DateTime.Now, ShipAddress = "Vĩnh Phúc", ShipEmail = "HieuKT@gmail.com", ShipName = "AnhTV", ShipPhoneNumber = "0987654234",Status = OrderStatus.InProgress, UserId = 1 }
+                    new Order() { Id = 1, ShipAddress = "Vĩnh Phúc", ShipEmail = "HieuKT@gmail.com", ShipName = "AnhTV", ShipPhoneNumber = "0987654234", Status = OrderStatus.InProgress, UserId = adminId }
                 );
             modelBuilder.Entity<OrderDetail>().HasData(
                     new OrderDetail() { OrderId = 1, Price = 200000, ProductId = 1, Quantity = 1 }
-                ); ;
+                );
+
+
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = roleId,
+                Name = "admin",
+                NormalizedName = "admin",
+                Description = "Administrator role"
+            });
+
+            var hasher = new PasswordHasher<AppUser>();
+            modelBuilder.Entity<AppUser>().HasData(new AppUser
+            {
+                Id = adminId,
+                UserName = "admin",
+                NormalizedUserName = "admin",
+                Email = "khuongtrunghieu38@gmail.com",
+                NormalizedEmail = "khuongtrunghieu38@gmail.com",
+                EmailConfirmed = false,
+                PasswordHash = hasher.HashPassword(null, "Abcd1234#"),
+                SecurityStamp = string.Empty,
+                FirstName = "Hieu",
+                LastName = "Khuong",
+                Dob = new DateTime(2020, 01, 31)
+            }) ;
+
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+                RoleId = roleId,
+                UserId = adminId
+            });
         }
     }
 }
